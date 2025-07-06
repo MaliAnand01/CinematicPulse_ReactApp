@@ -8,7 +8,7 @@ function Search({ searchTerm, setSearchTerm }) {
 
         <input
           type="text"
-          placeholder="Search through movies"
+          placeholder="Search through movies and TV shows"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />

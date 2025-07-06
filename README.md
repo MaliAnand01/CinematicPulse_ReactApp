@@ -1,12 +1,75 @@
-# React + Vite
+# Movie App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern React movie application that helps you discover and explore movies. Built with React, Vite, and TMDB API.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🎬 Search for movies with real-time results
+- 📱 Responsive design that works on all devices
+- ⭐ Movie ratings and detailed information
+- 🎭 Cast and crew information
+- 🏆 Awards and accolades
+- 📊 TMDB ratings and popularity
+- 🌍 Global movie database
 
-## Expanding the ESLint configuration
+## API Setup
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+This app uses the **TMDB API** (The Movie Database) for comprehensive movie data.
+
+### Getting an API Key
+
+1. Visit [TMDB API](https://www.themoviedb.org/settings/api)
+2. Sign up for a free account
+3. Request an API key
+4. Create a `.env` file in the root directory
+5. Add your API key:
+
+```env
+VITE_TMDB_API_KEY=your_tmdb_api_key_here
+```
+
+## Installation
+
+```bash
+npm install
+```
+
+## Development
+
+```bash
+npm run dev
+```
+
+## Build
+
+```bash
+npm run build
+```
+
+## Technologies Used
+
+- React 18
+- Vite
+- React Router
+- Framer Motion
+- Tailwind CSS
+- TMDB API
+
+## Project Structure
+
+```
+src/
+├── components/
+│   ├── Home.jsx          # Main page with search and movie list
+│   ├── MovieDetails.jsx  # Detailed movie information
+│   ├── MovieCard.jsx     # Individual movie card component
+│   ├── Search.jsx        # Search functionality
+│   ├── Spinner.jsx       # Loading spinner
+│   └── Footer.jsx        # Footer component
+├── appwrite.js           # Appwrite integration
+└── main.jsx             # App entry point
+```
+
+## Contributing
+
+Feel free to submit issues and enhancement requests!

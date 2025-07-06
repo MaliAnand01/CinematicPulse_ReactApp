@@ -8,14 +8,13 @@ import { getTrendingMovies, updateSearchCount } from "../appwrite";
 import Footer from "./Footer";
 import { motion } from "framer-motion";
 
-const API_BASE_URL = "https://api.themoviedb.org/3";
+const API_BASE_URL = "https://tmdb-proxy.my-movie-proxy.workers.dev";
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
 const API_OPTIONS = {
   method: "GET",
   headers: {
     accept: "application/json",
-    Authorization: `Bearer ${API_KEY}`,
   },
 };
 
@@ -26,10 +25,11 @@ function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [trendingMovies, setTrendingMovies] = useState([]);
+  const [contentType, setContentType] = useState("movie"); // "movie" or "tv"
 
   // Debounce the searchTerm to prevent unnecessary API calls
   // by waiting for 500ms before executing the fetchMovies function
-  useDebounce(() => setDebouncedSearchTerm(searchTerm), 500, [searchTerm]);
+  useDebounce(() => setDebouncedSearchTerm(searchTerm), 1000, [searchTerm]);
 
   const fetchMovies = async (query = "") => {
     setIsLoading(true);
@@ -37,8 +37,10 @@ function Home() {
 
     try {
       const endpoint = query
-        ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
-        : `${API_BASE_URL}/discover/movie?sort_by=popularity.desc`;
+        ? `${API_BASE_URL}?path=/search/${contentType}?query=${encodeURIComponent(
+            query
+          )}`
+        : `${API_BASE_URL}?path=/discover/${contentType}?sort_by=popularity.desc`;
 
       const response = await fetch(endpoint, API_OPTIONS);
 
@@ -48,12 +50,10 @@ function Home() {
 
       const data = await response.json();
 
-      // console.log("Received movies:", data);
-
       if (data.Response === "False") {
         setErrorMessage(
           data.Error ||
-            "Failed to fetch movie. Please check your internet connection."
+            "Failed to fetch content. Please check your internet connection."
         );
         setMovieList([]);
         return;
@@ -65,8 +65,8 @@ function Home() {
         await updateSearchCount(query, data.results[0]);
       }
     } catch (error) {
-      console.log("Error fetching movies:", error);
-      setErrorMessage("Failed to fetch movies. Please try again.");
+      console.log("Error fetching content:", error);
+      setErrorMessage("Failed to fetch content. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -84,11 +84,16 @@ function Home() {
 
   useEffect(() => {
     fetchMovies(debouncedSearchTerm);
-  }, [debouncedSearchTerm]);
+  }, [debouncedSearchTerm, contentType]);
 
   useEffect(() => {
     loadTrendingMovies();
   }, []);
+
+  const handleContentTypeChange = (type) => {
+    setContentType(type);
+    setSearchTerm(""); // Clear search when switching content type
+  };
 
   return (
     <main>
@@ -103,9 +108,36 @@ function Home() {
           />
           <img src="./hero.png" alt="hero banner" />
           <h1>
-            Find <span className="text-gradient">Movies</span> You'll Love
-            Without the Hassle
+            Find <span className="text-gradient">Movies & TV Shows</span> You'll
+            Love Without the Hassle
           </h1>
+
+          {/* Content Type Toggle */}
+          <div className="flex justify-center mt-6 mb-4">
+            <div className="bg-gray-800 rounded-lg p-1 flex">
+              <button
+                onClick={() => handleContentTypeChange("movie")}
+                className={`px-6 py-2 rounded-md transition-all duration-200 ${
+                  contentType === "movie"
+                    ? "bg-blue-600 text-white"
+                    : "text-gray-300 hover:text-white"
+                }`}
+              >
+                🎬 Movies
+              </button>
+              <button
+                onClick={() => handleContentTypeChange("tv")}
+                className={`px-6 py-2 rounded-md transition-all duration-200 ${
+                  contentType === "tv"
+                    ? "bg-blue-600 text-white"
+                    : "text-gray-300 hover:text-white"
+                }`}
+              >
+                📺 TV Shows
+              </button>
+            </div>
+          </div>
+
           <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header>
 
@@ -136,7 +168,9 @@ function Home() {
         )}
 
         <section className="all-movies">
-          <h2>Popular</h2>
+          <h2>
+            {contentType === "movie" ? "Popular Movies" : "Popular TV Shows"}
+          </h2>
 
           {isLoading ? (
             <Spinner />
@@ -150,8 +184,12 @@ function Home() {
               transition={{ duration: 0.6 }}
             >
               <ul>
-                {movieList.map((movie) => (
-                  <MovieCard key={movie.id} movie={movie} />
+                {movieList.map((item) => (
+                  <MovieCard
+                    key={item.id}
+                    movie={item}
+                    contentType={contentType}
+                  />
                 ))}
               </ul>
             </motion.div>

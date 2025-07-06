@@ -1,0 +1,9 @@
+name = "tmdb-proxy"
+main = "cloudflare-worker.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+TMDB_ACCESS_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyYmUxNDkxMTgxOWJhOWJkN2IzMmZmM2M0NzJiODU5NyIsIm5iZiI6MTc1MTczOTc5OS4zOTgwMDAyLCJzdWIiOiI2ODY5NmQ5NzAzN2I1OGU0MWE3MDI0YzUiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.b9yAbBgog5Nfm3kuRP-D0l7PpDt55U5t0mCR6jVu2fE"
+
+[env.production]
+name = "tmdb-proxy" 

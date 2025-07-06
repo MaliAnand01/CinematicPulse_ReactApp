@@ -5,17 +5,26 @@ function MovieCard({
   movie: {
     id,
     title,
+    name,
     vote_average,
     poster_path,
     release_date,
+    first_air_date,
     original_language,
   },
+  contentType = "movie"
 }) {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/movie/${id}`);
+    navigate(`/${contentType}/${id}`);
   };
+
+  // Use title for movies, name for TV shows
+  const displayTitle = contentType === "movie" ? title : name;
+  
+  // Use release_date for movies, first_air_date for TV shows
+  const displayDate = contentType === "movie" ? release_date : first_air_date;
 
   return (
     <div
@@ -28,11 +37,11 @@ function MovieCard({
             ? `https://image.tmdb.org/t/p/w500/${poster_path}`
             : "/no-movie.png"
         }
-        alt={title}
+        alt={displayTitle}
       />
 
       <div className="mt-4">
-        <h3>{title}</h3>
+        <h3>{displayTitle}</h3>
 
         <div className="content">
           <div className="rating">
@@ -44,7 +53,7 @@ function MovieCard({
           <p className="lang">{original_language}</p>
           <span>•</span>
           <p className="year">
-            {release_date ? release_date.split("-")[0] : "N/A"}
+            {displayDate ? displayDate.split("-")[0] : "N/A"}
           </p>
         </div>
       </div>
