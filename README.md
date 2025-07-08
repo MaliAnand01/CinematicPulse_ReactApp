@@ -27,7 +27,7 @@ A sophisticated movie discovery application that combines real-time search, tren
 
 ## 📱 Screenshots
 
-[screenshot.png]
+![alt text](screenshot.png)
 
 ## 🔧 Installation
 
