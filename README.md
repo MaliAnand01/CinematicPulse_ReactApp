@@ -23,7 +23,7 @@ A sophisticated movie discovery application that combines real-time search, tren
 
 ## 🚀 Live Demo
 
-[Add your deployed URL here]
+[[Cinematic Pulse](https://cinematicpulse.netlify.app/)]
 
 ## 📱 Screenshots
 
